@@ -1,89 +1,85 @@
-//$(document).ready(function() {
-//    $('#nodejs-annotator-body').click(false);
-//});
+$(document).ready(function() {
+    (function() {
+        var iterator = 0;
 
-$(function() {
-    'use strict';
+        var canvas = this.__canvas = new fabric.Canvas('c');
+        fabric.Object.prototype.transparentCorners = false;
 
-    // Get the absolute position of a particular object on the page
-    // Source: http://www.quirksmode.org/js/findpos.html
-    function findPos(obj) {
-        var curleft = 0, curtop = 0;
-        if (obj.offsetParent) {
-            do {
-                curleft += obj.offsetLeft;
-                curtop += obj.offsetTop;
-            } while (obj = obj.offsetParent);
-            return [curleft, curtop];
-        } else {
-            return false;
+        $('#rect').click(function() {
+            //alert("clicked");
+
+            var rect = new fabric.Rect({
+                width: 200,
+                height: 100,
+                left: 0,
+                top: 50,
+                angle: 0,
+                fill: 'rgba(255,0,0,.25)',
+                id: iterator
+            });
+
+            canvas.add(rect);
+
+            iterator++;
+
+            clearSelection();
+
+            $('#nodejs-sidebar-history-ul').append('<li id="li_' + rect.id + '" class="active">RectId = ' + rect.id + '<br/><span>Double-click to add a description</span><textarea id="txt_' + rect.id + '" class="form-control" style="display:none;"></textarea><button class="btn btn-primary" style="display:none;" id="btnSave_' + rect.id + '">Save</button></li>');
+
+            rect.on('selected', function(){
+                clearSelection();
+                var li = "#li_" + rect.id;
+                $(li).addClass("active");
+
+                console.log('selected rect: ' + rect.id);
+            });
+        });
+
+        canvas.on({
+            'object:moving': onChange,
+            'object:scaling': onChange,
+            'object:rotating': onChange,
+        });
+
+        function onChange(options) {
+            options.target.setCoords();
+            canvas.forEachObject(function(obj) {
+                if (obj === options.target) return;
+                obj.setOpacity(options.target.intersectsWithObject(obj) ? 0.5 : 1);
+            });
         }
-    }
 
-    // Get the current position of the mouse, relative to the page
-    function getCoords(event) {
-        event = event || window.event;
-        if (event.pageX || event.pageY) {
-            return {x: event.pageX, y: event.pageY};
-        }
-        return {
-            x: event.clientX + document.body.scrollLeft - document.body.clientLeft,
-            y: event.clientY + document.body.scrollTop  - document.body.clientTop
+        var clearSelection = function() {
+            $('#nodejs-sidebar-history-ul').children().each(function() {
+                $(this).removeClass("active");
+            });
         };
-    }
 
-    // Draw the shape based on the current coordinates and position at onmousedown
-    function doDraw(event) {
-        if (rect) {
-            var mousePos = getCoords(event);
-            var currentX = mousePos.x - offset[0];
-            var currentY = mousePos.y - offset[1];
-            var width = currentX - startX;
-            var height = currentY - startY;
+        $('#nodejs-sidebar-history-ul').on('click', 'li', function() {
+            var splitId = $(this).attr('id').toString().split('_');
+            var rectId = splitId[1];
+            //console.log(rectId);
+            canvas.setActiveObject(canvas.item(rectId));
+        });
 
-            if (width < 0) {
-                rect.attr({'x': currentX, 'width': width * -1});
-            } else {
-                rect.attr({'x': startX, 'width': width});
-            }
-            if (height < 0) {
-                rect.attr({'y': currentY, 'height': height * -1});
-            } else {
-                rect.attr({'y': startY, 'height': height});
-            }
-        }
-    }
+        $('#nodejs-sidebar-history-ul').on('dblclick', 'li', function() {
+            showForm($(this));
+        });
 
-    // Global variables
-    var div_paper = document.getElementById('nodejs-annotator-paper');
-    var paper = new Raphael('nodejs-annotator-paper');
-    var rect;
-    var startX = 0, startY = 0;
-    var offset = findPos(div_paper);
+        $('#nodejs-sidebar-history-ul').on('click', 'button', function() {
+            //$(this).parent().find("span").html($(this).parent().find("textarea").val());
+            $(this).siblings("span").html($(this).siblings("textarea").val());
+            hideForm($(this).parent());
+        });
 
-    div_paper.onmousedown = function(event) {
-        console.log('inside onmousedown');
+        var hideForm = function(li) {
+            $(li).find("textarea").css("display", "none");
+            $(li).find("button").css("display", "none");
+        };
 
-        var mouseCoords = getCoords(event);
-        startX = mouseCoords.x - offset[0];
-        startY = mouseCoords.y - offset[1];
-        rect = paper.rect(startX, startY, 0, 0);
-        //rect.attr("stroke", "#eeeeee");
-        rect.attr("fill", "#FFFF5E");
-        rect.attr("fill-opacity", 0.25);
-
-        document.onmousemove = doDraw;
-    };
-
-    document.onmouseup = function(event) {
-        if (rect) {
-            //rect.remove();
-
-            var label = "Coordinates: " + rect.attrs.x + ", " + rect.attrs.y
-                + " | Dimensions: " + rect.attrs.width + "x" + rect.attrs.height;
-            // create new history list item
-            $("#nodejs-annotator-history-pane-ul").append("<li>" + label + "</li>");
-        }
-        document.onmousemove = null;
-    };
-})();
+        var showForm = function(li) {
+            $(li).find("textarea").css("display", "block");
+            $(li).find("button").css("display", "block");
+        };
+    })();
+});

@@ -2,101 +2,47 @@
 <html>
 <head>
     <title>{{title}}</title>
+
+    <link rel="stylesheet" href="/stylesheets/bootstrap.css"/>
     <link rel='stylesheet' href='/stylesheets/style.css' />
-    <style type="text/css" media="screen">
-        div#nodejs-annotator-header {
-            height:30px;
-            background:#333;
-            color:white;
-            position:fixed !important;
-            left:0 !important;
-            top:0 !important;
-            z-index:9001 !important;
-            width:100%;
-            padding:5px;
-        }
-        div#nodejs-annotator-footer {
-            height:30px;
-            background:#333;
-            color:white;
-            position:fixed !important;
-            left:0 !important;
-            bottom:0 !important;
-            z-index:9001 !important;
-            width:100%;
-            padding:5px;
-        }
-        div#nodejs-annotator-paper {
-            background:transparent;
-            position:absolute;
-            height:3000px;
-            z-index: 9001 !important;
-            width:80%;
-        }
-        div#nodejs-annotator-body {
-            position: absolute;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select:none;
-            width:80%;
-            /*overflow: scroll;*/
-            /*height:300px;*/
-        }
-
-        div#nodejs-annotator-history-pane {
-            position:fixed !important;
-            right: 0;
-            top:0;
-            width:20%;
-            height:100%;
-            background:#333;
-            color:white;
-            padding-top:40px;
-            z-index: 9002 !important;
-            text-align:center;
-        }
-
-        ul#nodejs-annotator-history-pane-ul {
-            text-align:left;
-            list-style:none;
-            margin:0;
-            padding:5px;
-        }
-    </style>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script src="javascripts/raphael.js"></script>
-    <script src="javascripts/nodejs-annotator.js"></script>
+    <script src="/javascripts/fabric.min.js"></script>
 
-    <script type="text/javascript">
-//        $(document).on('mouseup', function(e){
-//
-//            console.log("mouse x,y coord = " + e.pageX + ", " + e.pageY);
-//
-//            var text = "";
-//            if (window.getSelection) {
-//                text = window.getSelection().toString();
-//            } else if (document.selection && document.selection.type != "Control") {
-//                text = document.selection.createRange().text;
-//            }
-//
-//            alert(text);
-//        });
-    </script>
-
+    <script src="/javascripts/bootstrap.js"></script>
+    <script src="/javascripts/nodejs-annotator.js"></script>
 </head>
 <body>
-<div id="nodejs-annotator-header">header</div>
-<div class="wrapper">
-    <div id="nodejs-annotator-paper"></div>
-    <div id="nodejs-annotator-body">{{{body}}}</div>
-    <div id="nodejs-annotator-history-pane">
-        <h1>History</h1>
-        <ul id="nodejs-annotator-history-pane-ul"></ul>
+
+<div id="container">
+    <div id="nodejs-sidebar">
+        <div id="nodejs-sidebar-tools">
+            <ul>
+                <li><span id="select" class="glyphicon glyphicon-hand-up"></span></li>
+                <li><span id="rect" class="glyphicon glyphicon-stop"></span></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div id="nodejs-sidebar-history">
+            <h1>History</h1>
+            <ul id="nodejs-sidebar-history-ul">
+                <!--<li>Item 1</li>-->
+                <!--<li>Item 2</li>-->
+                <!--<li>Item 3</li>-->
+                <!--<li>Item 4</li>-->
+                <!--<li>Item 5</li>-->
+            </ul>
+        </div>
     </div>
+    <div id="nodejs-content">
+        {{{body}}}
+    </div>
+    <canvas id="c" width="1280" height="1024" style="border:1px solid #aaa;">
+
+    </canvas>
+
+
 </div>
-<div id="nodejs-annotator-footer">footer</div>
 
 
 </body>

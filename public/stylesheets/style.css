@@ -1,8 +1,113 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    margin:0;
+    padding:0;
 }
 
-a {
-  color: #00B7FF;
+div#container {
+}
+
+div#nodejs-sidebar {
+    position:absolute;
+    right:0;
+    top:0;
+    width:300px;
+    background:#666;
+    text-align:center;
+    color:white;
+    padding:10px;
+    opacity: 0.85;
+    margin:10px;
+    border-radius: 15px;
+    min-height:100vh;
+}
+
+div#nodejs-sidebar-tools ul {
+    padding:0;
+    margin:0;
+    list-style:none;
+}
+
+div#nodejs-sidebar-tools li {
+    float:left;
+}
+
+div#nodejs-sidebar span.glyphicon {
+    font-size:1.5em;
+}
+
+div#nodejs-sidebar h1 {
+    text-transform:uppercase;
+    color:white;
+    padding:0;
+    margin:0;
+}
+
+div#nodejs-sidebar-history ul {
+    list-style:none;
+    margin:0;
+    padding:0;
+    text-align:left;
+}
+
+div#nodejs-sidebar-history li {
+    margin:0;
+    background:#eee;
+    color:#000;
+    padding:5px;
+    border-bottom:1px solid #000;
+}
+
+div#nodejs-sidebar-history li textarea {
+    color:black;
+}
+
+div#nodejs-sidebar-history li button {
+
+}
+
+div#nodejs-sidebar-history li:hover {
+    cursor:hand;
+    background:#333;
+    color:white;
+}
+
+div#nodejs-sidebar-history li.active {
+    background:#333;
+    color:white;
+}
+
+/*div#nodejs-content-wrapper {*/
+    /*width:1280px !important;*/
+    /*border-right:solid 2px #000;*/
+    /*border-bottom:solid 2px #000;*/
+    /*background:green;*/
+    /*opacity:.05;*/
+    /*z-index:1;*/
+/*}*/
+
+canvas#c {
+    width:1280px;
+    height:1024px;
+    position:absolute;
+    top:0;
+    left:0;
+    /*z-index:3;*/
+    /*-webkit-user-select: none;*/
+    /*background:green;*/
+    /*opacity:.5;*/
+}
+
+div#nodejs-content {
+    /*-webkit-user-select: none;*/
+    /*-moz-user-select: none;*/
+    /*-ms-user-select: none;*/
+    /*user-select:none;*/
+    /*background:blue;*/
+    /*opacity:.25;*/
+    position:absolute;
+    top:0;
+    left:0;
+    width:1280px;
+    z-order:2 !important;
+    color:black;
 }
