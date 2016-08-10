@@ -1,39 +1,56 @@
 $(document).ready(function() {
     (function() {
         var iterator = 0;
+        var currentMousePosition = { x:-1,y:-1 };
+        $(document).on("mousemove", function(e) {
+            currentMousePosition.x = e.pageX;
+            currentMousePosition.y = e.pageY;
+        });
 
-        var canvas = this.__canvas = new fabric.Canvas('c');
+        var canvas = window.__canvas = new fabric.CanvasEx('c');
         fabric.Object.prototype.transparentCorners = false;
 
         $('#rect').click(function() {
-            //alert("clicked");
+            addNewRect();
+        });
 
+        var addNewRect = function() {
             var rect = new fabric.Rect({
-                width: 200,
-                height: 100,
-                left: 0,
-                top: 50,
+                width: 30,
+                height: 30,
                 angle: 0,
                 fill: 'rgba(255,0,0,.25)',
+                originX:'center',
+                originY:'center'
+            });
+
+            var text = new fabric.Text(iterator.toString(), {
+                fontSize:20,
+                originX:'center',
+                originY:'center'
+            });
+
+            var group = new fabric.Group([rect, text], {
+                left: currentMousePosition.x,
+                top: currentMousePosition.y,
                 id: iterator
             });
 
-            canvas.add(rect);
+            canvas.add(group);
 
             iterator++;
 
             clearSelection();
 
-            $('#nodejs-sidebar-history-ul').append('<li id="li_' + rect.id + '" class="active">RectId = ' + rect.id + '<br/><span>Double-click to add a description</span><textarea id="txt_' + rect.id + '" class="form-control" style="display:none;"></textarea><button class="btn btn-primary" style="display:none;" id="btnSave_' + rect.id + '">Save</button></li>');
+            $('#nodejs-sidebar-history-ul').append('<li id="li_' + group.id + '" class="active">#' + group.id + '<br/><span></span><textarea placeholder="Enter a description" id="txt_' + group.id + '" class="form-control"></textarea><button class="btn btn-primary" id="btnSave_' + group.id + '">Save</button></li>');
 
-            rect.on('selected', function(){
-                clearSelection();
-                var li = "#li_" + rect.id;
+            group.on('selected', function(){
+                var li = "#li_" + group.id;
+                $(li).siblings().removeClass("active");
                 $(li).addClass("active");
-
-                console.log('selected rect: ' + rect.id);
+                console.log('selected obj: ' + group.id);
             });
-        });
+        };
 
         canvas.on({
             'object:moving': onChange,
@@ -52,13 +69,16 @@ $(document).ready(function() {
         var clearSelection = function() {
             $('#nodejs-sidebar-history-ul').children().each(function() {
                 $(this).removeClass("active");
+                hideForm($(this));
             });
         };
 
         $('#nodejs-sidebar-history-ul').on('click', 'li', function() {
+            $(this).siblings().removeClass("active");
+            $(this).addClass("active");
             var splitId = $(this).attr('id').toString().split('_');
             var rectId = splitId[1];
-            //console.log(rectId);
+            console.log(rectId);
             canvas.setActiveObject(canvas.item(rectId));
         });
 
@@ -81,5 +101,36 @@ $(document).ready(function() {
             $(li).find("textarea").css("display", "block");
             $(li).find("button").css("display", "block");
         };
+
+        canvas.on('mouse:dblclick', function (options) {
+            addNewRect();
+        });
+
+        //if ("Event" in window) {
+        //    // Listen to double click event on canvas element
+        //    Event.add(canvas.upperCanvasEl, 'dblclick', function (e, self) {
+        //        addNewRect();
+        //        var target = canvas.findTarget(e);
+        //        if (target) {
+        //            console.log('dblclick inside object');
+        //        } else {
+        //            console.log('dblclick outside object');
+        //        }
+        //
+        //        /*
+        //         var target = canvas.getActiveObject();
+        //         if (target) {
+        //         console.log('dblclick inside object');
+        //         } else {
+        //         console.log('dblclick outside object');
+        //         }
+        //         */
+        //    });
+        //}
+
+        //canvas.dblclick(function(e) {
+        //    //alert("dblclick");
+        //    addNewRect();
+        //});
     })();
 });
