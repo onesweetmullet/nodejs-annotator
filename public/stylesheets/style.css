@@ -98,10 +98,10 @@ canvas#c {
 }
 
 div#nodejs-content {
-    /*-webkit-user-select: none;*/
-    /*-moz-user-select: none;*/
-    /*-ms-user-select: none;*/
-    /*user-select:none;*/
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select:none;
     /*background:blue;*/
     /*opacity:.25;*/
     position:absolute;
